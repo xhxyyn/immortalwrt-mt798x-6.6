@@ -8,9 +8,9 @@ PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/RuijieNetworksCommunity/rtl8261-phy-driver.git
-PKG_SOURCE_DATE:=2026-04-21
-PKG_SOURCE_VERSION:=19fa6fa8347026f35b6cb41a5785b76e0e315b14
-PKG_MIRROR_HASH:=a8dcba9ca42920f54bbf1f7e532d6547d6ddd64e2005fa80a20772d38f33cdcc
+PKG_SOURCE_DATE:=2026-06-02
+PKG_SOURCE_VERSION:=799af1493ce181a0a087d7b38639209fbcda2f26
+PKG_MIRROR_HASH:=9a4feaa59f4a61fb11dd42b6921df71166d6ff7778e49bf9d411c5a55637db11
 
 PKG_LICENSE:=GPL-2.0-only
 PKG_LICENSE_FILES:=LICENSE
@@ -23,8 +23,20 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/phy-rtl8261d
   SUBMENU:=Network Devices
   TITLE:=Realtek RTL8261D 10 Gigabit PHY driver
+  DEPENDS:=+rtl8261c-firmware
   FILES:=$(PKG_BUILD_DIR)/src/rtl8261d.ko
   AUTOLOAD:=$(call AutoLoad,18,rtl8261d,1)
+endef
+
+define Package/rtl8261c-firmware
+  SECTION:=firmware
+  CATEGORY:=Firmware
+  TITLE:=Firmware for Realtek RTL8261C/RTL8261D PHY
+endef
+
+define Package/rtl8261c-firmware/install
+	$(INSTALL_DIR) $(1)/lib/firmware/rtl_nic
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/firmware/rtl8261c.bin $(1)/lib/firmware/rtl_nic/
 endef
 
 define Build/Compile
@@ -35,3 +47,4 @@ define Build/Compile
 endef
 
 $(eval $(call KernelPackage,phy-rtl8261d))
+$(eval $(call Package,rtl8261c-firmware))
