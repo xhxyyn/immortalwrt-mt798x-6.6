@@ -23,20 +23,8 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/phy-rtl8261d
   SUBMENU:=Network Devices
   TITLE:=Realtek RTL8261D 10 Gigabit PHY driver
-  DEPENDS:=+rtl8261c-firmware
   FILES:=$(PKG_BUILD_DIR)/src/rtl8261d.ko
   AUTOLOAD:=$(call AutoLoad,18,rtl8261d,1)
-endef
-
-define Package/rtl8261c-firmware
-  SECTION:=firmware
-  CATEGORY:=Firmware
-  TITLE:=Firmware for Realtek RTL8261C/RTL8261D PHY
-endef
-
-define Package/rtl8261c-firmware/install
-	$(INSTALL_DIR) $(1)/lib/firmware/rtl_nic
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/firmware/rtl8261c.bin $(1)/lib/firmware/rtl_nic/
 endef
 
 define Build/Compile
@@ -47,4 +35,3 @@ define Build/Compile
 endef
 
 $(eval $(call KernelPackage,phy-rtl8261d))
-$(eval $(call Package,rtl8261c-firmware))
